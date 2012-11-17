@@ -30,7 +30,7 @@ group :test, :development do
   gem "shoulda"
   gem "factory_girl_rails"
   gem "rspec-rails"
-  gem "active_scaffold", :git => 'git://github.com/activescaffold/active_scaffold.git'
+  # gem "active_scaffold", :git => 'git://github.com/activescaffold/active_scaffold.git'
 end
 
 # To use ActiveModel has_secure_password
