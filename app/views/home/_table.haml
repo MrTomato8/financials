@@ -2,8 +2,7 @@
 %table
   %tbody
     %tr
-      %td.header{"colspan"=>4}
-        #{header}
+      %td.header{"data-bind"=>"text:$root.label.#{mode}()","colspan"=>4}
     / ko foreach:categories
     %tr
       %td{"data-bind"=>"text:title","colspan"=>4}
@@ -12,10 +11,11 @@
       %td{"data-bind"=>"text:title"}
       / ko foreach:months
       %td
-        %input{"data-bind"=>"value:#{field}","type"=>"text","size"=>"6"}
+        %input{"data-bind"=>"value:$root.value.#{mode}($data)","type"=>"text","size"=>"6"}
       / /ko
-      / ko foreach:ko.computed($root.purchaseSummary(months))
-      %td{"data-bind"=>"text:parseFloat($data).toFixed(2)"}
+      :plain
+        <!-- ko foreach:$root.summary.#{mode}(months) -->
+      %td{"data-bind"=>"text:$data"}
       / /ko
     / /ko
     / /ko

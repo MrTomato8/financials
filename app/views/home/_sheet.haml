@@ -5,35 +5,58 @@
       new (function() {
         this.categories=ko.mapping.fromJS(#{@categories});
         
-        this.purchaseTotal = function(data) {
-          return function() {
-            return data.purchase_amount()*data.purchase_price();
-          };
+        this.header = {
+          purchase: {
+            inventory:function(){return"Purchase Price"},
+            quantity:function(){return"Quantity"},
+            total:function(){return"Totals"}
+          }, revenue: {
+            inventory:function(){return"Price List"},
+            quantity:function(){return"Quantity Sold"},
+            total:function(){return"Total Revenue"}
+          }
         };
         
-        this.purchaseSummary = function(data) {
-          return function() {
-            var x = new Array(4);
-            var l = data().length/x.length;
-            
-            for(var i = 0; i < x.length; i++) {
-              var t = 0;
-              
-              for(var j = 0; j < l; j++) {
-                t+=data()[i*l+j].purchase_price();
-              }
-              
-              x[i]=parseFloat(t)/parseFloat(l);
-            }
-            
-            return x;
-          };
+        this.label = this.header.#{mode};
+        
+        this.value = {
+          inventory:function(data) {return data.#{mode}_price},
+          quantity:function(data) {return data.#{mode}_amount},
+          total:function(data) {return ko.observable(parseFloat(data.#{mode}_amount()*data.#{mode}_price()).toFixed(2))}
         };
-      })();
-  
+        
+        var summary_impl = function(fun) {
+            return function(data) {
+              return ko.computed(function() {
+                var x = new Array(4);
+                var l = data().length/x.length;
+                
+                for(var i = 0; i < x.length; i++) {
+                  var t = 0;
+                  
+                  for(var j = 0; j < l; j++) {
+                    t+=fun(data()[i*l+j])();
+                  }
+                  
+                  x[i]=(parseFloat(t)/parseFloat(l)).toFixed(2);
+                }
+                
+                return x;
+              });
+            };
+          };
+          
+        var self = this;
+      
+      this.summary = {
+        inventory:summary_impl(self.value["inventory"]),
+        quantity:summary_impl(self.value["quantity"]),
+        total:summary_impl(self.value["total"]) 
+      };
+    })();
     ko.applyBindings(model);
   });
 
-= render partial:"table", locals:{header:"Purchase Price",field:"purchase_price"}    
-= render partial:"table", locals:{header:"Quantity",field:"purchase_amount"}
-= render partial:"table", locals:{header:"Total Purchasing Cost",field:"ko.computed($root.purchaseTotal($data))"}
+= render partial:"table", locals:{mode:"inventory"}    
+= render partial:"table", locals:{mode:"quantity"}
+= render partial:"table", locals:{mode:"total"}
