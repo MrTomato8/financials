@@ -1,0 +1,21 @@
+
+%table
+  %tbody
+    %tr
+      %td.header{"colspan"=>4}
+        #{header}
+    / ko foreach:categories
+    %tr
+      %td{"data-bind"=>"text:title","colspan"=>4}
+    / ko foreach:items
+    %tr
+      %td{"data-bind"=>"text:title"}
+      / ko foreach:months
+      %td
+        %input{"data-bind"=>"value:#{field}","type"=>"text","size"=>"6"}
+      / /ko
+      / ko foreach:ko.computed($root.purchaseSummary(months))
+      %td{"data-bind"=>"text:$data"}
+      / /ko
+    / /ko
+    / /ko

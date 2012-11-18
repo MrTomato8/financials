@@ -2,7 +2,7 @@ class HomeController < ApplicationController
   respond_to :json
   
   def index
-    
+    @categories = Category.all.to_json(:include => {:items => {:include => :months}})
   end
   
   def update

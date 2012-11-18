@@ -1,6 +1,39 @@
 
-%form{method:"post",action:"/",enctype:"multipart/form-data"}
-  %label{for:"file"}
-    Upload Inventory file
-  = file_field "inventory","file"
-  = submit_tag "Upload"
+:javascript
+  $(function() {
+    var model = 
+      new (function() {
+        this.categories=ko.mapping.fromJS(#{@categories});
+        
+        this.purchaseTotal = function(data) {
+          return function() {
+            return data.purchase_amount()*data.purchase_price();
+          };
+        };
+        
+        this.purchaseSummary = function(data) {
+          return function() {
+            var x = new Array(4);
+            var l = data().length/x.length;
+            
+            for(var i = 0; i < x.length; i++) {
+              var t = 0;
+              
+              for(var j = 0; j < l; j++) {
+                t+=data()[i*l+j].purchase_price();
+              }
+              
+              x[i]=0.50/3;
+            }
+            
+            return x;
+          };
+        };
+      })();
+  
+    ko.applyBindings(model);
+  });
+
+= render partial:"table", locals:{header:"Purchase Price",field:"purchase_price"}    
+= render partial:"table", locals:{header:"Quantity",field:"purchase_amount"}
+= render partial:"table", locals:{header:"Total Purchasing Cost",field:"ko.computed($root.purchaseTotal($data))"}
