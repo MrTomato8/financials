@@ -1,22 +1,8 @@
 class HomeController < ApplicationController
   respond_to :json
   
-  def contents p
-    file = p["file"]
-    name = file.original_filename
-    CSV.parse(file.read)
-  end
-  
   def index
-    unless params[:inventory].nil? 
-      data = contents params[:inventory]
-      
-      data.each do |i|
-        unless i[2].nil?
-          puts i
-        end
-      end
-    end
+    
   end
   
   def update
