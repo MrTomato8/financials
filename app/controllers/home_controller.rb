@@ -6,12 +6,21 @@ class HomeController < ApplicationController
   end
   
   def update
-    json = ActiveSupport::JSON.decode(request.body)
+    json = JSON.load(request.body) 
     
-    json.each do |i|
-      puts "#{i['id'].to_s()}:cost=#{i['cost'].to_s()},sales=#{i['sales'].to_s()}"
+    for i in json do
+      for j in i["items"] do
+        for k in j["months"] do
+          month = Month.where(id:k["id"]).first
+          month.update_attributes({
+            purchase_amount:k["purchase_amount"],
+            purchase_price:k["purchase_price"],
+            sales_amount:k["sales_amount"],
+            sales_price:k["sales_price"]})
+        end
+      end
     end
     
-    render json:"{'response':'success'}" 
+    render :json, "{'response':'success'}"
   end
 end

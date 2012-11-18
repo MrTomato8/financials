@@ -1,7 +1,25 @@
 
 :javascript
-  parsedCategories=ko.mapping.fromJS(#{@categories});
+  $(function() {
+    parsedCategories=ko.mapping.fromJS(#{@categories});
+    
+    $("#submit").click(function() {
+      $.ajax({
+          type: "post",
+          url: "/home/update",
+          data: ko.mapping.toJSON(parsedCategories),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function(data){alert(data);},
+          failure: function(errMsg) {
+              alert(errMsg);
+          }});
+      return false;
+    });
+  });
   
+= button_tag "Submit", id: "submit", type: :button
+
 = render partial:"sheet", locals:{mode:"revenue",field:"sales"}
 <p>###############################################################</p>
 = render partial:"sheet", locals:{mode:"purchase",field:"purchase"}

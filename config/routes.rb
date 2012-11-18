@@ -1,6 +1,6 @@
 Financials::Application.routes.draw do
   root to:"home#index"
-  get "home/inventory"
+  post "home/update"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
