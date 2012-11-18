@@ -11,11 +11,12 @@
       %td{"data-bind"=>"text:title"}
       / ko foreach:months
       %td
-        %input{"data-bind"=>"value:$root.value.#{mode}($data)","type"=>"text","size"=>"6"}
+        %input{"#{readonly}"=>"#{readonly}","data-bind"=>"value:$root.value.#{mode}($data)","type"=>"text","size"=>"6"}
       / /ko
       :plain
         <!-- ko foreach:$root.summary.#{mode}(months) -->
-      %td{"data-bind"=>"text:$data"}
+      %td
+        %input{"readonly"=>"readonly","data-bind"=>"value:$data","type"=>"text","size"=>"6"}
       / /ko
     / /ko
     / /ko

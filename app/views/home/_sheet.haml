@@ -3,7 +3,7 @@
   $(function() {
     var model = 
       new (function() {
-        this.categories=ko.mapping.fromJS(#{@categories});
+        this.categories=parsedCategories;
         
         this.header = {
           purchase: {
@@ -20,9 +20,9 @@
         this.label = this.header.#{mode};
         
         this.value = {
-          inventory:function(data) {return data.#{mode}_price},
-          quantity:function(data) {return data.#{mode}_amount},
-          total:function(data) {return ko.observable(parseFloat(data.#{mode}_amount()*data.#{mode}_price()).toFixed(2))}
+          inventory:function(data) {return data.#{field}_price},
+          quantity:function(data) {return data.#{field}_amount},
+          total:function(data) {return ko.observable(parseFloat(data.#{field}_amount()*data.#{field}_price()).toFixed(2))}
         };
         
         var summary_impl = function(fun) {
@@ -54,9 +54,10 @@
         total:summary_impl(self.value["total"]) 
       };
     })();
-    ko.applyBindings(model);
+    ko.applyBindings(model,$("#sheets-#{mode}")[0]);
   });
 
-= render partial:"table", locals:{mode:"inventory"}    
-= render partial:"table", locals:{mode:"quantity"}
-= render partial:"table", locals:{mode:"total"}
+%div{"id"=>"sheets-#{mode}"}
+  = render partial:"table", locals:{mode:"inventory",readonly:""}    
+  = render partial:"table", locals:{mode:"quantity",readonly:""}
+  = render partial:"table", locals:{mode:"total",readonly:"readonly"}

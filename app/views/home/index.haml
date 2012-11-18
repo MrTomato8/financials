@@ -1,2 +1,7 @@
 
-= render partial:"sheet", locals:{mode:"purchase"}
+:javascript
+  parsedCategories=ko.mapping.fromJS(#{@categories});
+  
+= render partial:"sheet", locals:{mode:"revenue",field:"sales"}
+<p>###############################################################</p>
+= render partial:"sheet", locals:{mode:"purchase",field:"purchase"}
