@@ -15,7 +15,7 @@
         %input{"data-bind"=>"value:#{field}","type"=>"text","size"=>"6"}
       / /ko
       / ko foreach:ko.computed($root.purchaseSummary(months))
-      %td{"data-bind"=>"text:$data"}
+      %td{"data-bind"=>"text:parseFloat($data).toFixed(2)"}
       / /ko
     / /ko
     / /ko
